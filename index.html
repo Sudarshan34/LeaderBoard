@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leaderboard Project</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: url("pinterest.jpg");
+        /* background-repeat: no-repeat; */
+        height: 100px;    
+    }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      th {
+        background-color: cyan;
+        border: 2px solid black;
+      }
+      input {
+        padding: 5px;
+        margin-right: 10px;
+        border-radius: 10px;
+        border: 2px solid black;
+      }
+      #input-container {
+        margin-bottom: 20px;
+      }
+      .delete-button {
+        background-color: yellowgreen;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 5px 10px;
+        cursor: pointer;
+        
+      }
+
+      .delete-button:hover{
+        color: black;
+        background-color: white;
+      }
+
+      #addPlayer {
+        background-color: white;
+        border-radius: 10px;
+        border: 2px solid black;
+        height: 30px;
+        cursor: pointer;
+      }
+      #addPlayer:hover {
+        background-color: yellowgreen;
+        color: white;
+      }
+
+      h1 {
+    
+        color: white;
+        padding: 5px;
+        /* background-color: yellowgreen; */
+      }
+
+      #leaderboard-body {
+        border: 2px solid black;
+       color: rgb(255, 255, 0);
+        /* background-color: black; */
+      }
+    </style>
+  </head>
+  <body>
+
+    <h1>Leaderboard</h1>
+
+    <div id="input-container">
+      <input type="text" id="firstName" placeholder="First Name" />
+      <input type="text" id="lastName" placeholder="Last Name" />
+      <input type="text" id="country" placeholder="Country" />
+      <input type="text" id="score" placeholder="Player Score" />
+      <button id="addPlayer">Add Player</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Country</th>
+          <th>Player Score</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboard-body"></tbody>
+    </table>
+
+    <script>
+      const leaderboardData = [
+        {
+          id: 1,
+          firstName: "Ravi",
+          lastName: "Shankar",
+          country: "India",
+          score: 100,
+        },
+        {
+          id: 2,
+          firstName: "Sudarshan",
+          lastName: "S",
+          country: "India",
+          score: 85,
+        },
+        {
+          id: 3,
+          firstName: "Goutham",
+          lastName: "Elangovan",
+          country: "India",
+          score: 72,
+        },
+      ];
+
+      const leaderboardBody = document.getElementById("leaderboard-body");
+      const addPlayerButton = document.getElementById("addPlayer");
+
+      function updateLeaderboard() {
+        leaderboardData.sort((a, b) => b.score - a.score);
+        leaderboardBody.innerHTML = "";
+        leaderboardData.forEach((player) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                    <td>${player.firstName}</td>
+                    <td>${player.lastName}</td>
+                    <td>${player.country}</td>
+                    <td>${player.score}</td>
+                    <td><button class="delete-button" onclick="deletePlayer(${player.id})">Delete</button></td>
+                `;
+          leaderboardBody.appendChild(row);
+        });
+      }
+
+      function deletePlayer(id) {
+        const index = leaderboardData.findIndex((player) => player.id === id);
+        if (index !== -1) {
+          leaderboardData.splice(index, 1);
+          updateLeaderboard();
+        }
+      }
+
+      addPlayerButton.addEventListener("click", () => {
+        const firstNameInput = document.getElementById("firstName");
+        const lastNameInput = document.getElementById("lastName");
+        const countryInput = document.getElementById("country");
+        const scoreInput = document.getElementById("score");
+
+        const newPlayer = {
+          id: Date.now(),
+          firstName: firstNameInput.value,
+          lastName: lastNameInput.value,
+          country: countryInput.value,
+          score: parseInt(scoreInput.value),
+        };
+
+        leaderboardData.push(newPlayer);
+        updateLeaderboard();
+
+        firstNameInput.value = "";
+        lastNameInput.value = "";
+        countryInput.value = "";
+        scoreInput.value = "";
+      });
+
+      updateLeaderboard();
+    </script>
+  </body>
+</html>
